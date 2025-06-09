@@ -4,3 +4,8 @@ azure/.terraform/
 azure/*.tfstate
 azure/*.tfstate.backup
 azure/*.tfplan
+
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfplan
