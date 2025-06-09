@@ -1,0 +1,1 @@
+{"Modules":[{"Key":"","Source":"","Dir":"."},{"Key":"app_service","Source":"./modules/appservice","Dir":"modules/appservice"},{"Key":"key_vault","Source":"./modules/key_vault","Dir":""},{"Key":"network","Source":"./modules/network","Dir":"modules/network"}]}
