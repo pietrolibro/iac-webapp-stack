@@ -20,17 +20,40 @@ The following steps will guide you through:
 - Terraform installed.
 - Sufficient permissions to create resources in your Azure subscription.
 
+## Landing Zone
+
+This IaC stack is designed to be deployed in a dedicated landing zone (online\\non-prod\\lz-non-prod-subscription), which includes the following components:
+
+- **Resource Group**: A dedicated resource group for the web application.
+- **Web Application**: An Azure Web App for hosting the application.
+- **App Service Plan**: An App Service Plan to define the hosting environment for the web application.
+- **Virtual Network**: A virtual network for network isolation and security.
+- **Service Principal**: A service principal for Terraform to manage resources securely.
+- **Storage Account**: A storage account for storing the Terraform state file.
+- **Container**: A container within the storage account to hold the Terraform state file.
+
+##  Management Groups and Subscriptions
+This IaC stack is designed to be deployed in a dedicated landing zone (online\\non-prod\\lz-non-prod-subscription). Below is the structure of the management groups and subscriptions:
+
+
+![Management Groups - Subscriptions Diagram](./docs/images/Mgmt-Subscriptions.png)
+
+
 ## Step 1: Set Environment Variables
 
 Set the following environment variables to define resource names and locations. Adjust values as needed for your environment.
 
 ```Bash
-export TF_VAR_AZ_IAC_WEBAPP_RESOURCE_GROUP_LOCATION="switzerlandnorth"
+# Set environment variables for the Azure web application stack.
+export TF_VAR_AZ_IAC_WEBAPP_RESOURCE_GROUP_LOCATION="westus"
 export TF_VAR_AZ_IAC_WEBAPP_RESOURCE_GROUP_NAME="iac-webapp-rg"
-export TF_VAR_AZ_IAC_TF_STATE_RESOURCE_GROUP_NAME="iac-tfstate-rg"
 export TF_VAR_AZ_IAC_WEBAPP_VNET_NAME="iac-webapp-vnet"
 export TF_VAR_AZ_IAC_WEBAPP="iac-webapp"
 export TF_VAR_AZ_IAC_WEBAPP_SRV_PLAN="iac-webapp-srv-plan"
+
+# Set the resource group name for Terraform state management.
+export TF_VAR_AZ_IAC_TF_STATE_RESOURCE_GROUP_LOCATION="switzerlandnorth"
+export TF_VAR_AZ_IAC_TF_STATE_RESOURCE_GROUP_NAME="iac-tfstate-rg"
 ```
 
 ## Step 2: Create a Service Principal
@@ -66,7 +89,7 @@ Create a resource group for the Terraform state management.
 
 ```Bash
 az group create --name $TF_VAR_AZ_IAC_TF_STATE_RESOURCE_GROUP_NAME \
-  --location $TF_VAR_AZ_IAC_WEBAPP_RESOURCE_GROUP_LOCATION
+  --location $TF_VAR_AZ_IAC_TF_STATE_RESOURCE_GROUP_LOCATION
 ```
 
 ## Step 6: Set Shared Values for Terraform State
@@ -124,7 +147,6 @@ To remove all resources created by this stack:
 ```Bash
 terraform destroy
 ```
-
 ---
 
 By following these steps, you will have a fully provisioned and running web application environment on Azure, managed via Terraform and ready for further customization.
