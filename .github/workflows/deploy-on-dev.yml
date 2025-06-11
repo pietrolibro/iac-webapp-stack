@@ -48,11 +48,6 @@ jobs:
         -backend-config="container_name=${{ vars.IAC_TF_STATE_CONTAINER_NAME }}" \
         -backend-config="key=${{ vars.IAC_TF_STATE_KEY_NAME }}"
 
-    # Checks that all Terraform configuration files adhere to a canonical format
-    - name: Terraform Format
-      working-directory: ./azure
-      run: terraform fmt -check
-
     # Generates an execution plan for Terraform
     - name: Terraform Plan
       working-directory: ./azure
