@@ -27,19 +27,19 @@ jobs:
       with:
         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-    - name: Show ENVs
-      run:  echo ${{ vars.IAC_TF_STATE_RESOURCE_GROUP }}
-            echo ${{ vars.IAC_TF_STATE_STRACC_NAME }}
-            echo ${{ vars.IAC_TF_STATE_CONTAINER_NAME }}
-            echo ${{ vars.IAC_TF_STATE_KEY_NAME }}
+    - name: ChDir
+      run:  |
+            cd ./azure \
+            ls
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
-      run: terraform init \
-            -backend-config="resource_group_name=${{ vars.IAC_TF_STATE_RESOURCE_GROUP }}" \
-            -backend-config="storage_account_name=${{ vars.IAC_TF_STATE_STRACC_NAME }}" \
-            -backend-config="container_name=${{ vars.IAC_TF_STATE_CONTAINER_NAME }}" \
-            -backend-config="key=${{ vars.IAC_TF_STATE_KEY_NAME }}"
+      run: |
+        terraform init \
+        -backend-config="resource_group_name=${{ vars.IAC_TF_STATE_RESOURCE_GROUP }}" \
+        -backend-config="storage_account_name=${{ vars.IAC_TF_STATE_STRACC_NAME }}" \
+        -backend-config="container_name=${{ vars.IAC_TF_STATE_CONTAINER_NAME }}" \
+        -backend-config="key=${{ vars.IAC_TF_STATE_KEY_NAME }}"
 
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
