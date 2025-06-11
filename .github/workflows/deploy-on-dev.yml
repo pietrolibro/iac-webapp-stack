@@ -1,4 +1,4 @@
-name: 'Terraform'
+name: 'Deploy on DEV'
 
 on: workflow_dispatch
 
@@ -28,10 +28,10 @@ jobs:
         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
     - name: Show ENVs
-      run:  echo ${{ vars.development.IAC_TF_STATE_RESOURCE_GROUP }}
-            echo ${{ vars.development.IAC_TF_STATE_STRACC_NAME }}
-            echo ${{ vars.development.IAC_TF_STATE_CONTAINER_NAME }}
-            echo ${{ vars.development.IAC_TF_STATE_KEY_NAME }}
+      run:  echo ${{ vars.IAC_TF_STATE_RESOURCE_GROUP }}
+            echo ${{ vars.IAC_TF_STATE_STRACC_NAME }}
+            echo ${{ vars.IAC_TF_STATE_CONTAINER_NAME }}
+            echo ${{ vars.IAC_TF_STATE_KEY_NAME }}
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
