@@ -77,3 +77,21 @@ jobs:
       working-directory: ./azure
       # if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
       run: terraform apply -auto-approve -input=false
+      env:
+        ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+        ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+        ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+        TF_VAR_lz_connectivity_subscription_id : ${{ secrets.TF_VAR_lz_connectivity_subscription_id }}
+        TF_VAR_lz_connectivity_tenant_id : ${{ secrets.TF_VAR_lz_connectivity_subscription_id }}
+        TF_VAR_lz_connectivity_client_id : ${{ secrets.TF_VAR_lz_connectivity_subscription_id }}
+        TF_VAR_lz_connectivity_client_secret : ${{ secrets.TF_VAR_lz_connectivity_subscription_id }}
+        TF_VAR_lz_non_prod_subscription_id : ${{ secrets.TF_VAR_lz_non_prod_subscription_id }}
+        TF_VAR_lz_non_prod_tenant_id : ${{ secrets.TF_VAR_lz_non_prod_subscription_id }}
+        TF_VAR_lz_non_prod_client_id : ${{ secrets.TF_VAR_lz_non_prod_subscription_id }}
+        TF_VAR_lz_non_prod_client_secret : ${{ secrets.TF_VAR_lz_non_prod_subscription_id }}
+        TF_VAR_AZ_IAC_WEBAPP_RESOURCE_GROUP_LOCATION : ${{ vars.TF_VAR_AZ_IAC_WEBAPP_RESOURCE_GROUP_LOCATION }}
+        TF_VAR_AZ_IAC_WEBAPP_RESOURCE_GROUP_NAME : ${{ vars.TF_VAR_AZ_IAC_WEBAPP_RESOURCE_GROUP_NAME }}
+        TF_VAR_AZ_IAC_WEBAPP_VNET_NAME : ${{ vars.TF_VAR_AZ_IAC_WEBAPP_VNET_NAME }}
+        TF_VAR_AZ_IAC_WEBAPP : ${{ vars.TF_VAR_AZ_IAC_WEBAPP }}
+        TF_VAR_AZ_IAC_WEBAPP_SRV_PLAN : ${{ vars.TF_VAR_AZ_IAC_WEBAPP_SRV_PLAN }}
