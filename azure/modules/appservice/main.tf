@@ -1,3 +1,11 @@
+terraform {
+  required_providers {
+    azurerm = {
+      source = "hashicorp/azurerm"
+    }
+  }
+}
+
 resource "azurerm_app_service_plan" "webapp_plan" {
   name                = var.webapp_name
   location            = var.location
@@ -8,6 +16,8 @@ resource "azurerm_app_service_plan" "webapp_plan" {
   }
   kind     = "Linux"
   reserved = true
+
+  provider = azurerm
 }
 
 resource "azurerm_linux_web_app" "webapp" {
@@ -26,4 +36,6 @@ resource "azurerm_linux_web_app" "webapp" {
   app_settings = {
     "WEBSITE_RUN_FROM_PACKAGE" = "1"
   }
+
+  provider = azurerm
 }

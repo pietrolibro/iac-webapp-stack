@@ -32,8 +32,11 @@ This IaC stack is designed to be deployed in a dedicated landing zone (online\\n
 - **Storage Account**: A storage account for storing the Terraform state file.
 - **Container**: A container within the storage account to hold the Terraform state file.
 
-##  Management Groups and Subscriptions
-This IaC stack is designed to be deployed in a dedicated landing zone (online\\non-prod\\lz-non-prod-subscription). Below is the structure of the management groups and subscriptions:
+## Management Groups, Subscriptions, and Landing Zones
+
+Each landing zone is associated with a specific Azure subscription. For example, the non-prod landing zone (lz-non-prod) is mapped to its own subscription, and the connectivity landing zone (lz-connectivity) is mapped to a different subscription. This separation allows for clear boundaries, access control, and resource management between different environments or network topologies (such as hub & spoke).
+
+Below is the structure of the management groups and subscriptions:
 
 
 ![Management Groups - Subscriptions Diagram](./docs/images/Mgmt-Subscriptions.png)
@@ -73,6 +76,16 @@ export ARM_SUBSCRIPTION_ID="<azure_subscription_id>"
 export ARM_TENANT_ID="<azure_tenant_id>"
 export ARM_CLIENT_ID="<azure_sp_client_id>"
 export ARM_CLIENT_SECRET="<azure_sp_client_secret>"
+
+export TF_VAR_lz_non_prod_subscription_id="<hub_subscription_id>"
+export TF_VAR_lz_non_prod_tenant_id="<hub_tenant_id>"
+export TF_VAR_lz_non_prod_client_id="<hub_sp_client_id>"
+export TF_VAR_lz_non_prod_client_secret="<hub_sp_client_secret>"
+
+export TF_VAR_lz_connectivity_subscription_id="<spoke_subscription_id>"
+export TF_VAR_lz_connectivity_tenant_id="<spoke_tenant_id>"
+export TF_VAR_lz_connectivity_client_id="<spoke_sp_client_id>"
+export TF_VAR_lz_connectivity_client_secret="<spoke_sp_client_secret>"
 ```
 
 ## Step 4: Log In Using the Service Principal

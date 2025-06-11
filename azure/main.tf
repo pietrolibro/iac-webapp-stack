@@ -17,8 +17,25 @@ terraform {
   }
 }
 
+provider "azurerm" {
+  features {}
+}
 
 provider "azurerm" {
+  alias           = "lz-nonprod"
+  subscription_id = var.lz_non_prod_subscription_id
+  tenant_id       = var.lz_non_prod_tenant_id
+  client_id       = var.lz_non_prod_client_id
+  client_secret   = var.lz_non_prod_client_secret
+  features {}
+}
+
+provider "azurerm" {
+  alias           = "lz-connectivity"
+  subscription_id = var.lz_connectivity_subscription_id
+  tenant_id       = var.lz_connectivity_tenant_id
+  client_id       = var.lz_connectivity_client_id
+  client_secret   = var.lz_connectivity_client_secret
   features {}
 }
 
@@ -27,7 +44,7 @@ data "azurerm_client_config" "current" {}
 resource "random_string" "webapp_name_suffix" {
   length  = 30    # Set the length of the string
   lower   = true  # Use lowercase letters
-  numeric = false  # Include numbers
+  numeric = false # Include numbers
   special = false # No special characters
   upper   = false # No uppercase letters
 }
@@ -36,7 +53,6 @@ resource "random_integer" "webapp_srvplan_suffix" {
   min = 1000
   max = 9999
 }
-
 
 ################################################
 # Create a Resource Group for the Web App
@@ -49,17 +65,23 @@ resource "azurerm_resource_group" "webapp_rg" {
     environment = "production"
     created_by  = "terraform"
   }
+
+  provider = azurerm.lz-nonprod
 }
 
 ################################################
 # Create a Virtual Network for the Web App
 ################################################
-module network {
+module "network" {
   source = "./modules/network"
 
   resource_group_name = var.AZ_IAC_WEBAPP_RESOURCE_GROUP_NAME
   location            = var.AZ_IAC_WEBAPP_RESOURCE_GROUP_LOCATION
   vnet_name           = var.AZ_IAC_WEBAPP_VNET_NAME
+
+  providers = {
+    azurerm = azurerm.lz-nonprod
+  }
 
   depends_on = [azurerm_resource_group.webapp_rg]
 }
@@ -69,15 +91,19 @@ module network {
 #################################################
 # Create an App Service Plan and Web App
 #################################################
-module app_service {
-  source = "./modules/appservice"
+module "app_service" {
+  source              = "./modules/appservice"
   location            = var.AZ_IAC_WEBAPP_RESOURCE_GROUP_LOCATION
   resource_group_name = var.AZ_IAC_WEBAPP_RESOURCE_GROUP_NAME
-  webapp_name         = "${var.AZ_IAC_WEBAPP}-${random_string.webapp_name_suffix.result}" 
+  webapp_name         = "${var.AZ_IAC_WEBAPP}-${random_string.webapp_name_suffix.result}"
   appservice_plan     = "${var.AZ_IAC_WEBAPP_SRV_PLAN}-${random_integer.webapp_srvplan_suffix.result}"
 
   depends_on = [azurerm_resource_group.webapp_rg]
-} 
+
+  providers = {
+    azurerm = azurerm.lz-nonprod
+  }
+}
 
 #################################################
 # App Service Plan and Virtual Network Integration
@@ -86,5 +112,7 @@ resource "azurerm_app_service_virtual_network_swift_connection" "webapp_vnet_int
 
   app_service_id = module.app_service.webapp_id
   subnet_id      = module.network.subnet_id
-  depends_on = [module.app_service]
+  depends_on     = [module.app_service]
+
+  provider = azurerm.lz-nonprod
 }

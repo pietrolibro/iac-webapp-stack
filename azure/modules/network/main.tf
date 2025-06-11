@@ -1,3 +1,11 @@
+terraform {
+  required_providers {
+    azurerm = {
+      source = "hashicorp/azurerm"
+    }
+  }
+}
+
 ####################################################
 # Create a virtual network and a default subnet
 ####################################################
@@ -31,4 +39,6 @@ resource "azurerm_subnet" "vnet_default_subnet" {
       ]
     }
   }
+
+  provider = azurerm
 }
